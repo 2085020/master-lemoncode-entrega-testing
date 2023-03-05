@@ -1,0 +1,34 @@
+name: CI workflow
+
+on: pull_request
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install
+        run: npm i
+
+      - name: Unit Testing
+        run: npm run test
+
+      - name: Test e2e
+        run: npm run test:e2e:ci
+
+      - name: Upload screenshots when spec fail
+        if: ${{failure()}}
+        uses: actions/upload-artifact@v3
+        with:
+          name: screenshots
+          path: ./cypress/screenshots
+
+      - name: Upload videos when spec fail
+        if: ${{failure()}}
+        uses: actions/upload-artifact@v3
+        with:
+          name: videos
+          path: ./cypress/videos
+
