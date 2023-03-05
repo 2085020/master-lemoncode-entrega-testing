@@ -12,6 +12,23 @@ jobs:
       - name: Install
         run: npm i
 
-      - name: Test e22
+      - name: Unit Testing
         run: npm run test
+
+      - name: Test e2e
+        run: npm run test:e2e:ci
+
+      - name: Upload screenshots when spec fail
+        if: ${{failure()}}
+        uses: actions/upload-artifact@v3
+        with:
+          name: screenshots
+          path: ./cypress/screenshots
+
+      - name: Upload videos when spec fail
+        if: ${{failure()}}
+        uses: actions/upload-artifact@v3
+        with:
+          name: videos
+          path: ./cypress/videos
 
